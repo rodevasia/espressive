@@ -45,7 +45,6 @@ function updateModulesTs(moduleName) {
     lines.pop();
     const signModule = `register('/${moduleName}',${capitalizeFirstLetter(moduleName)});\n\nexport default this;`
     const newFile = lines.join('\n')
-    console.log(newFile);
     fs.writeFileSync(path.join(process.cwd(), 'app', 'modules.ts'), format(newFile, { parser: 'typescript', }));
     fs.appendFileSync(path.join(process.cwd(), 'app', 'modules.ts'), format(signModule, { parser: 'typescript' }))
 }
