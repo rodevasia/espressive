@@ -7,7 +7,7 @@ const execute = require('./init/init');
 const { isMainArg } = require('./utility');
 
 
-const version = '1.0.9'
+const version = '1.0.10'
 if (isMainArg('--init')) {
     execute(version) // espress version
 } else if (isMainArg('--gen')) {
