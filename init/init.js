@@ -18,7 +18,8 @@ async function execute(version) {
             description: desc,
             author,
             framework: {
-                version
+                version,
+                assets:['/static']
             }
         }
         await createDirectory(project, espressiveObject);
@@ -45,7 +46,9 @@ function createDirectory(name, espressiveObject) {
             fs.writeFileSync(path.join(process.cwd(), name, 'index.ts'), prettier.format(`
                 import {Server} from '@docsploit/espress';
                 import modules from './app/modules'
-                const server = new Server({limit:'100mb'},modules,'${capitalizeFirstLetter(name)}')
+                const server = new Server({limit:'100mb'},modules,'${capitalizeFirstLetter(name)}');
+                // add code here
+                server.run();
             `, { parser: 'typescript' }));
             const pkgJson = fs.readFileSync(path.join(__dirname, 'src_template', 'package.json.template')).toString('utf-8')
             const renderPkgJson = renderTemplate(pkgJson, { name, desc: espressiveObject.description, version: espressiveObject.framework.version });
@@ -56,7 +59,27 @@ function createDirectory(name, espressiveObject) {
             fs.writeFileSync(path.join(process.cwd(), name, 'tsconfig.json'), tsConfig);
             fs.mkdirSync(path.join(process.cwd(), name, '.vscode'));
             fs.mkdirSync(path.join(process.cwd(), name, 'utils'));
-            fs.mkdirSync(path.join(process.cwd(), name, 'public'));
+            fs.mkdirSync(path.join(process.cwd(), name, 'static'));
+            fs.writeFileSync(path.join(process.cwd(),name,'static','404.html'),`<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404</title>
+</head>
+<style>
+    body{
+        display: flex;
+        width: 100vw;
+        height: 100vh;
+        justify-content: center;
+    }
+</style>
+<body>
+    <h1>404</h1>
+</body>
+</html>`)
             fs.writeFileSync(path.join(process.cwd(), name, '.vscode', 'settings.json'), JSON.stringify({
                 "files.exclude": {
                     "**/.git": true,
