@@ -46,6 +46,7 @@ async function execute(version) {
         root: "app",
 
       },
+      environment: "development"
 
     };
 
@@ -73,7 +74,7 @@ function createDirectory(name, espressiveObject) {
       console.log(chalk.blueBright("Creating espressive folder..."));
 
       fs.mkdirSync(path.join(process.cwd(), name));
-      
+
       fs.writeFileSync(
 
         path.join(process.cwd(), name, ".espressive"),
@@ -84,11 +85,11 @@ function createDirectory(name, espressiveObject) {
 
       fs.mkdirSync(path.join(process.cwd(), name, "app"));
 
-      
+
       fs.writeFileSync(
 
         path.join(process.cwd(), name, "index.ts"),
-        
+
         prettier.format(
           `
                 import {Server} from '@docsploit/espress';
@@ -106,7 +107,7 @@ function createDirectory(name, espressiveObject) {
         )
 
       );
-      
+
       const pkgJson = fs
 
         .readFileSync(
@@ -136,7 +137,7 @@ function createDirectory(name, espressiveObject) {
       );
 
       const gitignore = fs
-      
+
         .readFileSync(
 
           path.join(__dirname, "src_template", ".gitignore.template")

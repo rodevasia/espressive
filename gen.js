@@ -2,14 +2,14 @@ const chalk = require('chalk')
 const fs = require('fs')
 const path = require('path')
 const { format } = require('prettier')
-const { scan, capitalizeFirstLetter } = require('./utility');
+const {  capitalizeFirstLetter } = require('./utility');
 
-async function generate(version) {
+async function generate(version,name) {
     if (fs.existsSync(path.join(process.cwd(), '.espressive'))) {
         const esp = fs.readFileSync(path.join(process.cwd(), '.espressive')).toString('utf-8')
         const espObj = JSON.parse(esp);
         if (version === espObj.framework.version) {
-            let moduleName = await scan('Module Name :', 'Module name is required!');
+            let moduleName = name
             moduleName = moduleName.toLowerCase();
             fs.mkdirSync(path.join(process.cwd(), 'app', moduleName))
             const controllerPath = path.join(process.cwd(), 'app', moduleName, moduleName + '.controller.ts')
