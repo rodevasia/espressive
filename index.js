@@ -33,7 +33,9 @@ if (argv.gen && typeof argv.gen === "string") {
 
 if (argv._.includes('build')) {
     const ra = ora('Building Project').start();
-    fs.rmSync(path.join(process.cwd(), 'build'), { recursive: true })
+    if(fs.existsSync(path.join(process.cwd(), 'build'))){
+        fs.rmSync(path.join(process.cwd(), 'build'), { recursive: true })
+    }
     const esp = fs.readFileSync(path.join(process.cwd(), '.espressive')).toString('utf-8')
     const espObj = JSON.parse(esp);
     espObj.environment = "production";
