@@ -11,7 +11,7 @@ const fs = require('fs');
 const fe = require('fs-extra');
 const path = require('path');
 const crypto = require('crypto');
-const { spawn } = require('child_process');
+const { spawn, spawnSync } = require('child_process');
 const { format } = require('prettier');
 const ora = require('ora');
 
@@ -33,13 +33,13 @@ if (argv.gen && typeof argv.gen === "string") {
 
 if (argv._.includes('build')) {
     const ra = ora('Building Project').start();
-    if(fs.existsSync(path.join(process.cwd(), 'build'))){
+    if (fs.existsSync(path.join(process.cwd(), 'build'))) {
         fs.rmSync(path.join(process.cwd(), 'build'), { recursive: true })
     }
     const esp = fs.readFileSync(path.join(process.cwd(), '.espressive')).toString('utf-8')
     const pkg = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'package.json')).toString('utf-8'));
-    pkg.devDependencies=undefined;
-    pkg.scripts={start:"node index.js",install:"npm i"}
+    pkg.devDependencies = undefined;
+    pkg.scripts = { start: "node index.js"}
     const espObj = JSON.parse(esp);
     espObj.environment = "production";
     espObj.key = crypto.randomBytes(345).toString('hex');
@@ -53,6 +53,10 @@ if (argv._.includes('build')) {
         
         ra.stop();
         console.log(chalk.green`Project built successfully`);
+        const depOra=ora('Installing build dependencies').start()
+        const dep=spawn('npm',['i'],{cwd: path.join(process.cwd(), 'build')})
+        dep.on('error',console.log);
+        dep.on('exit',()=>depOra.stop())
     })
     return
 }
