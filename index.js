@@ -37,6 +37,9 @@ if (argv._.includes('build')) {
         fs.rmSync(path.join(process.cwd(), 'build'), { recursive: true })
     }
     const esp = fs.readFileSync(path.join(process.cwd(), '.espressive')).toString('utf-8')
+    const pkg = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'package.json')).toString('utf-8'));
+    pkg.devDependencies=undefined;
+    pkg.scripts={start:"node index.js"}
     const espObj = JSON.parse(esp);
     espObj.environment = "production";
     espObj.key = crypto.randomBytes(345).toString('hex');
@@ -44,8 +47,10 @@ if (argv._.includes('build')) {
     const proc = spawn('tsc', { stdio: 'inherit', });
     proc.on('exit', () => {
         fs.writeFileSync(path.join(process.cwd(), 'build', '.espressive'), format(JSON.stringify(espObj), { parser: 'json' }));
+        fs.writeFileSync(path.join(process.cwd(), 'build', 'package.json'), format(JSON.stringify(pkg), { parser: 'json' }));
         fs.mkdirSync(path.join(process.cwd(), "build", "static"));
-        fe.copySync(path.join(process.cwd(), 'static',), path.join(process.cwd(), "build", "static"),)
+        fe.copySync(path.join(process.cwd(), 'static',), path.join(process.cwd(), "build", "static"),);
+        
         ra.stop();
         console.log(chalk.green`Project built successfully`);
     })
