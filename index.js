@@ -39,7 +39,7 @@ if (argv._.includes('build')) {
     const esp = fs.readFileSync(path.join(process.cwd(), '.espressive')).toString('utf-8')
     const pkg = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'package.json')).toString('utf-8'));
     pkg.devDependencies=undefined;
-    pkg.scripts={start:"node index.js"}
+    pkg.scripts={start:"node index.js",install:"npm i"}
     const espObj = JSON.parse(esp);
     espObj.environment = "production";
     espObj.key = crypto.randomBytes(345).toString('hex');
