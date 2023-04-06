@@ -19,7 +19,11 @@ $ npm i -g @docsploit/espressive
 - Add new module
 
 ```bash
-$ espressive --gen
+$ espressive --gen=<moduleName>
+```
+- Build project
+```bash
+$ espressive build
 ```
 
 **Know more at [espress](https://www.npmjs.com/package/@docsploit/espress)**
