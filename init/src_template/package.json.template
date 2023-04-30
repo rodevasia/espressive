@@ -2,6 +2,7 @@
   "name": "<%name%>",
   "version": "1.0.0",
   "description": "<%desc%>",
+  "author": "<%author%>",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.ts",
@@ -9,6 +10,5 @@
     "build":"espressive build"
   },
   "keywords": [],
-  "author": "",
   "license": "ISC"
 }

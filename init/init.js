@@ -51,7 +51,7 @@ async function execute(version) {
 
     };
 
-    await createDirectory(project, espressiveObject);
+    await createDirectory(project, author, espressiveObject);
 
     installDependencies(project);
 
@@ -62,7 +62,7 @@ async function execute(version) {
   }
 }
 
-function createDirectory(name, espressiveObject) {
+function createDirectory(name, author, espressiveObject) {
 
   return new Promise((resolve, reject) => {
 
@@ -126,6 +126,7 @@ function createDirectory(name, espressiveObject) {
         desc: espressiveObject.description,
 
         version: espressiveObject.framework.version,
+        author
 
       });
 
@@ -234,28 +235,16 @@ function createDirectory(name, espressiveObject) {
 
 function installDependencies(name) {
 
-  const or = ora("Installing dependencies").start()
-
-  const install = spawn("npm", ["i", "@docsploit/espress",], {
+  console.log(chalk.cyan`Installing dependencies`);
+  spawnSync("npm", ["i", "@docsploit/espress", "typescript"], {
     cwd: path.join(process.cwd(), name),
+    stdio: 'inherit'
+  });
 
-  });
-  install.on('error', (err) => {
-    or.stop();
-    console.log(err);
-    process.exit();
-  });
-  install.on('exit', () => {
-    or.stop();
-    const devOra = ora('Installing development dependencies').start();
-    const installDev = spawn("npm", ["i", "-D", "nodemon", "ts-node", "typescript", "@docsploit/espressive"], { cwd: path.join(process.cwd(), name) });
-    installDev.on('error', (err) => {
-      devOra.stop();
-      console.log(err)
-      process.exit();
-    });
-    install.on('exit', () => devOra.stop())
-  })
+  console.log(chalk.cyan`Installing dev dependencies`);
+  spawnSync("npm", ["i", "-D", "nodemon", "ts-node", "@docsploit/espressive"],
+    { cwd: path.join(process.cwd(), name), stdio: 'inherit' });
+
 
 
 }

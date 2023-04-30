@@ -15,7 +15,7 @@ const { spawn, spawnSync } = require('child_process');
 const { format } = require('prettier');
 const ora = require('ora');
 
-const version = '1.0.26'
+const version = '1.1.0'
 
 if (argv.init) {
     execute(version);
