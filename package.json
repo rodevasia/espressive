@@ -1,6 +1,6 @@
 {
   "name": "@docsploit/espressive",
-  "version": "3.2.5",
+  "version": "3.3.0",
   "description": "CLI for espress projects",
   "main": "index.js",
   "scripts": {
