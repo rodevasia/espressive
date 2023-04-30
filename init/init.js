@@ -4,8 +4,9 @@ const fs = require("fs");
 const { table } = require("table");
 const figlet = require("figlet");
 const { scan, capitalizeFirstLetter, renderTemplate } = require("../utility");
-const { spawnSync } = require("child_process");
+const { spawnSync, spawn } = require("child_process");
 const prettier = require("prettier");
+const ora = require("ora");
 
 async function execute(version) {
 
@@ -233,13 +234,29 @@ function createDirectory(name, espressiveObject) {
 
 function installDependencies(name) {
 
-  console.log(chalk.green`Installing Dependencies`);
+  const or = ora("Installing dependencies").start()
 
-  spawnSync("npm", ["install", "--prefix", path.join(process.cwd(), name)], {
-
-    stdio: "inherit",
+  const install = spawn("npm", ["i", "@docsploit/espress",], {
+    cwd: path.join(process.cwd(), name),
 
   });
+  install.on('error', (err) => {
+    or.stop();
+    console.log(err);
+    process.exit();
+  });
+  install.on('exit', () => {
+    or.stop();
+    const devOra = ora('Installing development dependencies').start();
+    const installDev = spawn("npm", ["i", "-D", "nodemon", "ts-node", "typescript", "@docsploit/espressive"], { cwd: path.join(process.cwd(), name) });
+    installDev.on('error', (err) => {
+      devOra.stop();
+      console.log(err)
+      process.exit();
+    });
+    install.on('exit', () => devOra.stop())
+  })
+
 
 }
 

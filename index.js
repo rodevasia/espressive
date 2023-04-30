@@ -53,10 +53,6 @@ if (argv._.includes('build')) {
         
         ra.stop();
         console.log(chalk.green`Project built successfully`);
-        const depOra=ora('Installing build dependencies').start()
-        const dep=spawn('npm',['i'],{cwd: path.join(process.cwd(), 'build')})
-        dep.on('error',console.log);
-        dep.on('exit',()=>depOra.stop())
     })
     return
 }
@@ -64,12 +60,13 @@ if (argv._.includes('build')) {
 else {
     figlet('Espressive v3', (err, res) => {
         console.log(chalk.yellowBright.bold(res));
-        console.log(chalk.bold`\t\t\tHelp Center`)
-        console.log('');
-        console.log(chalk.yellow`\tYou passed an invalid argument available commands are :\n`);
-        console.log(chalk.cyan`\t--init\t${chalk.white`Initialize Project`}`);
-        console.log(chalk.cyan`\t--gen\t${chalk.white`Generate Modules`}`);
-        console.log(chalk.cyan`\tbuild\t${chalk.white`Build Production version`}`);
+        console.log('Espress ',chalk.blue(version));
+        console.log('Espressive ',chalk.blue(require('./package.json').version))
+        console.log(chalk.bold`\t\t\tHelp Center\n`)
+        argv._.length>0?console.log(chalk.yellow`\tYou passed an invalid argument available commands are :\n`):null
+        console.log(chalk.cyan`\t--init\t${chalk.white`Initialize Project`}\n`);
+        console.log(chalk.cyan`\t--gen\t${chalk.white`Generate Modules`}\n`);
+        console.log(chalk.cyan`\tbuild\t${chalk.white`Build Project`}\n`);
         console.log('\n');
     })
 }
